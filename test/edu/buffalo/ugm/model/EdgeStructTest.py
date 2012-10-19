@@ -25,10 +25,15 @@ class EdgeStructTest(unittest.TestCase):
         adj[i+3][i+4] = 1
         adj[i+4][i+3] = 1
         
-        edgeSt = EdgeStruct.EdgeStruct()
-        edges = edgeSt.init(adj,nStates)
+        edgeSt = EdgeStruct.EdgeStruct(adj,nStates)
+        #edgeSt.init(adj,nStates)
         
-        print "edges: " + str(edges)
+        print "edges: " + str(edgeSt.edges)
+        print "nStates: " + str(edgeSt.numberOfStates)
+        print "nodes associated with edge 1: " + str(edgeSt.edgeEnds(1))
+        #edgeSt.getEdges(2)
+        print "edges with node 2: " + str(edgeSt.getEdges(2))
+        print "neighbours of node 2: " + str(edgeSt.getNeighbour(2))
         
         
         
