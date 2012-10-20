@@ -19,6 +19,12 @@ class EdgeStruct(object):
     
     #adjacency graph
     adj = []
+    
+    #number of edges in the graph
+    nEdges = 0
+    
+    #states each variable can have
+    nStates = 0
 
 
     def __init__(self, adj, nStates):
@@ -41,6 +47,8 @@ class EdgeStruct(object):
         self.edges = edges
         self.adj = adj
         
+        self.nEdges = len(self.edges)
+        self.nStates = nStates
         
         for i in range(len(line)):
             self.nodes.append(i)
