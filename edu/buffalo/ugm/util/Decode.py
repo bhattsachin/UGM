@@ -35,10 +35,37 @@ class Decode(object):
         print "rows: " + str(rows) + " cols: " + str(cols)
         self.table = numpy.zeros((rows, cols))
         
+        nNodes = len(edgeStruct.nodes)
         
         #lets apply permutation to first n(nodes) columns and list all possible values
         #assuming states will be numbers starting from zero to stated value. FIXME: we should not live on these assumptions
         self.enumerateAll(0, len(edgeStruct.nodes) - 1, [3], edgeStruct.nStates)
+        
+        #multiply the state with their nodePotentials
+        for k in range(rows):
+            for j in range(len(edgeStruct.nodes)):
+                self.table[k][nNodes + j] = nodePot[j][self.table[k][j]]
+                
+        #get the edge potentials
+        for k in range(rows):
+            for p in range(edgeStruct.nEdges):
+                edgeEnds = edgeStruct.edges[p]
+                endOne = self.table[k][edgeEnds[0]]
+                endTwo = self.table[k][edgeEnds[1]]
+                #print " edgePot:" + str(edgePot[p][endOne][endTwo])
+                self.table[k][2*nNodes + p] = edgePot[p][endOne][endTwo]
+                
+        #compute product of potentials
+        for k in range(rows):
+            prod = 1
+            for p in range(nNodes + edgeStruct.nEdges):
+                prod = prod*self.table[k][nNodes + p]
+            self.table[k][cols-2] = prod
+            
+        #decoding outputs most optimal parameters
+        #max = self.table[][col-2]
+        #for k in range(rows):
+            
         
         print str(self.table)
       
