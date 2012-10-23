@@ -7,6 +7,7 @@ import unittest
 import numpy
 from edu.buffalo.ugm.model import EdgeStruct
 from edu.buffalo.ugm.util import Decode
+from edu.buffalo.ugm.util import Inference
 
 
 class EdgeStructTest(unittest.TestCase):
@@ -58,6 +59,8 @@ class EdgeStructTest(unittest.TestCase):
         decode = Decode.Decode()
         decode.exact(nodePot,edgePot, edgeSt)
         
+        inference = Inference.Inference()
+        inference.exact(nodePot, edgePot, edgeSt)
         
         
         pass
