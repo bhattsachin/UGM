@@ -21,4 +21,6 @@ class ExactInferModel(object):
         '''
         Constructor
         '''
+    def __str__(self):
+        return "[[nodeBel:" + str(self.nodeBel) +  "], [logZ:" + str(self.logZ) + "]]"
         

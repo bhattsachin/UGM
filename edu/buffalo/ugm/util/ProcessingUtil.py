@@ -6,6 +6,8 @@ Created on Oct 22, 2012
 '''
 
 import numpy
+import random
+from random import uniform
 
 class ProcessingUtil(object):
     
@@ -52,6 +54,15 @@ class ProcessingUtil(object):
             for p in range(nNodes + edgeStruct.nEdges):
                 prod = prod*table[k][nNodes + p]
             table[k][cols-2] = prod
+            
+        #computing Z
+        z = 0
+        for k in range(rows):
+            z = z + table[k][cols-2]
+        
+        #computing probability of each
+        for k in range(rows):
+            table[k][cols-1] = table[k][cols-2]/z
         
         return table
     
@@ -74,6 +85,21 @@ class ProcessingUtil(object):
                 for j in range(tNode + 1):
                     table[self.cRow][j] = vArray[j]
                 self.cRow = self.cRow+1
+    
+    '''
+    creates nSamples number between a and b. uniformly distributed
+    '''            
+    def uniformDistribution(self,a,b,nSamples):
+        step = (b-a)/float(nSamples) #casting one to float
+        distr = numpy.zeros(nSamples)
+        pointA = a
+        pointB = a+step
+        print "step: " + str(step)
+        for i in range(nSamples):
+            distr[i] = uniform(pointA,pointB)
+            pointA = pointB
+            pointB = pointA+step
+        return distr
        
     
     

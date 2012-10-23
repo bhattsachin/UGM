@@ -3,7 +3,8 @@ Created on Oct 18, 2012
 
 @author: bhatt
 '''
-from edu.buffalo.ugm.util import ProcessingUtil;
+from edu.buffalo.ugm.util import ProcessingUtil
+from edu.buffalo.ugm.model import ExactInferModel
 import numpy
 import math
 
@@ -45,13 +46,16 @@ class Inference(object):
                         sum = sum + table[k][cols-2]
                 marginal[i][j] = sum
                 
-        print " marginal: " + str(marginal)
         marginal = marginal/z
         print " marginal: " + str(marginal)
         print " logZ: " + str(math.log(z))
         
+        inferModel = ExactInferModel.ExactInferModel()
+        inferModel.nodeBel = marginal
+        inferModel.logZ = math.log(z)
+        #I don't really understand why we need edge marginals right now and hence deferring implementation
                     
-            
+        return inferModel 
         
         
         

@@ -3,11 +3,11 @@ Created on Oct 18, 2012
 
 @author: bhatt
 '''
-import unittest
-import numpy
 from edu.buffalo.ugm.model import EdgeStruct
-from edu.buffalo.ugm.util import Decode
-from edu.buffalo.ugm.util import Inference
+from edu.buffalo.ugm.util import Decode, Inference, Sample
+import numpy
+import unittest
+
 
 
 class EdgeStructTest(unittest.TestCase):
@@ -60,8 +60,13 @@ class EdgeStructTest(unittest.TestCase):
         decode.exact(nodePot,edgePot, edgeSt)
         
         inference = Inference.Inference()
-        inference.exact(nodePot, edgePot, edgeSt)
+        inferModel = inference.exact(nodePot, edgePot, edgeSt)
+        print "marginals: " + str(inferModel)
         
+        sample = Sample.Sample()
+        samples = sample.exact(nodePot, edgePot, edgeSt, 100)
+        
+        print "samples: " + str(samples)
         
         pass
 
