@@ -49,6 +49,7 @@ class Inference(object):
         marginal = marginal/z
         print " marginal: " + str(marginal)
         print " logZ: " + str(math.log(z))
+        
                     
             
         
