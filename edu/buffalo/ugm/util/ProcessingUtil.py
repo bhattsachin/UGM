@@ -138,8 +138,10 @@ class ProcessingUtil(object):
                 #print "index:" + str(tmp.argmax(axis=0))
                 
             else:
-                first = numpy.array(nodePot[i][range[0,nStates[i]]])
-                alpha[i][range(0, nStates[i])] = first*(numpy.sum(tmp))
+                first = numpy.array(nodePot[i][range(0,nStates[i])])
+                print "sum(tmp): " + str(numpy.sum(tmp))
+                print "tmp: " + str(tmp)
+                alpha[i][range(0, nStates[i])] = nodePot[i][range(0,nStates[i])]*(numpy.sum(tmp))
                 
             kappa[i] = numpy.sum(alpha[i][range(0, nStates[i])])
             dividend = alpha[i][range(0, nStates[i])]

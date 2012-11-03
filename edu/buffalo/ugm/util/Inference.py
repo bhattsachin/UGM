@@ -56,6 +56,64 @@ class Inference(object):
         #I don't really understand why we need edge marginals right now and hence deferring implementation
                     
         return inferModel 
+    
+    
+    def chain(self, nodePot, edgePot, edgeStruct):
+        nNodes = len(edgeStruct.nodes) #size of node
+        nStates = edgeStruct.numberOfStates #assuming all have same possible states
+        maximize = 0
+        util = ProcessingUtil.ProcessingUtil()
+        maxStates = edgeStruct.nStates
+        #forward pass
+        chainDecode =  util.chainFwd(nodePot, edgePot, nStates,nNodes, maximize) 
+        
+        #backward phase
+        beta = numpy.zeros((nNodes,edgeStruct.nStates))
+        beta[nNodes-1][range(0,nStates[nNodes-1])] = 1
+        
+        for i in xrange(nNodes-2, -1, -1):
+            first = numpy.tile(nodePot[i+1][range(0,nStates[i+1])],(nStates[i],1))
+            second = edgePot[i][range(0,nStates[i+1])][range(0,nStates[i])]
+            print "first:  " + str(first)
+            print "second: " + str(second)
+            tmp = first*second
+            print "tmp: " + str(tmp)
+            tmp2 = numpy.tile(beta[i+1][range(0,nStates[i+1])], (nStates[i],1))
+            betatmp = tmp*tmp2
+            betatmp = numpy.sum(betatmp,axis=1)
+            
+            beta[i][range(0,nStates[i])] = betatmp.transpose()
+            #Normalizing
+            beta[i][range(0,nStates[i])] = beta[i][range(0,nStates[i])]/numpy.sum(beta[i][range(0,nStates[i])])
+        print "something: " + str(beta)
+        print "alpha:" + str(chainDecode.alpha)
+        
+        #node beliefs
+        nodeBel = numpy.zeros((nodePot.shape[0], nodePot.shape[1]))
+        for i in range(nNodes):
+            #print "first: " + str(chainDecode.alpha[i][range(0,nStates[i])])
+            #print "second: " + str(beta[i][range(0,nStates[i])])
+            tmp = (chainDecode.alpha[i][range(0,nStates[i])])*(beta[i][range(0,nStates[i])])
+            nodeBel[i][range(0,nStates[i])]= tmp/(numpy.sum(tmp))
+            print "sum tmp: " + str(numpy.sum(tmp))
+            print "tmp: " + str(tmp)
+        
+        #Edge beliefs
+        edgeBel = numpy.zeros((edgePot.shape[0],edgePot.shape[1],edgePot.shape[2]))
+        
+        for i in xrange(nNodes-1):
+            tmp = numpy.zeros((maxStates, maxStates))
+            for j in xrange(nStates[i]):
+                for k in xrange(nStates[i+1]):
+                    tmp[j][k] = chainDecode.alpha[i][j]*nodePot[i+1][k]*beta[i+1][k]*edgePot[i][j][k]
+                    
+            edgeBel[i] = tmp/numpy.sum(tmp)
+            #print "edgeBel: " + str(edgeBel)
+        
+        
+        print "nodeBel: " + str(nodeBel)
+        print "edgeBel: " + str(edgeBel)
+        
         
         
         

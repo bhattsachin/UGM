@@ -6,7 +6,7 @@ Created on Nov 1, 2012
 import unittest
 import numpy
 from edu.buffalo.ugm.model import EdgeStruct
-from edu.buffalo.ugm.util import Decode
+from edu.buffalo.ugm.util import Decode,Inference
 
 class Test(unittest.TestCase):
 
@@ -54,6 +54,9 @@ class Test(unittest.TestCase):
         decode = Decode.Decode()
         nodeLabels = decode.chain(nodePot,edgePot, edgeSt)
         print "nodelabels: " + str(nodeLabels)
+        
+        inference = Inference.Inference()
+        inferModel = inference.chain(nodePot, edgePot, edgeSt)
         
         pass
 
